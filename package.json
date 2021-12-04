@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "start:dev": "adonis serve --dev",
+    "start:dev:withDB": "docker-compose -f opt-tools/docker/docker-compose.yml up --build",
     "migration:run": "adonis migration:run",
     "migration:rollback": "adonis migration:rollback",
     "migration:reset": "adonis migration:reset",

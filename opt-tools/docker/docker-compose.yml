@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  app:
+    depends_on:
+      - redis
+      - db
+    build: 
+      context: ../../
+      dockerfile: ops-tools/docker/images/app/Dockerfile
+    command:  sh -c "until nc -z db 5432; do sleep 1; done; npm run migration:run && npm run start:dev"
+    restart: unless-stopped
+    container_name: web-docker-practice-app 
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=8888
+      # REDIS_HOST=localhost для варианта открытых портов на хосте
+      - REDIS_HOST=redis
+      - DB_HOST=db
+      - DB_CONNECTION=pg
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=school
+      - DB_DATABASE=school
+    volumes:
+      - ../../:/app
+    ports:
+      - 8888:8888
+    networks:
+      - docker-practice-net   
+
+  redis:
+    image: redis:6.2.6-alpine
+    container_name: web-docker-practice-redis
+    restart: unless-stopped
+    # по п.1 задачи порты открыты, по п.2 лучше закрыть, доступ только у сервиса
+    # ports:
+    #   - 6379:6379
+    networks:
+      - docker-practice-net  
+
+  db:
+    image: postgres:14.1-alpine
+    container_name: web-docker-practice-db
+    restart: unless-stopped
+    volumes:
+      - ../../data/dump:/db-dump
+    # по п.1 задачи порты открыты, по п.2 лучше закрыть, доступ только у сервиса
+    ports:
+       - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=school
+      - POSTGRES_DB=school
+      - PGDATA=/data/postgres 
+    networks:
+      - docker-practice-net        
+
+networks:   
+   docker-practice-net:
+     driver: bridge       
+     
+     
