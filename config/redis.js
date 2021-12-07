@@ -32,9 +32,7 @@ module.exports = {
   |
   */
   local: {
-    //как понял параметры подключения к REDIS тут, прячем базу внутри сети докера
     host: Env.get('REDIS_HOST', 'localhost'),
-    //host: '127.0.0.1',
     port: 6379,
     password: null,
     db: 0,

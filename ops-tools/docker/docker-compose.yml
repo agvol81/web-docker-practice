@@ -8,6 +8,7 @@ services:
     build: 
       context: ../../
       dockerfile: ops-tools/docker/images/app/Dockerfile
+    image: web-docker-practice-app 
     command:  sh -c "until nc -z db 5432; do sleep 1; done; npm run migration:run && npm run start:dev"
     restart: unless-stopped
     container_name: web-docker-practice-app 
@@ -15,7 +16,6 @@ services:
       - NODE_ENV=development
       - HOST=0.0.0.0
       - PORT=8888
-      # REDIS_HOST=localhost для варианта открытых портов на хосте
       - REDIS_HOST=redis
       - DB_HOST=db
       - DB_CONNECTION=pg
