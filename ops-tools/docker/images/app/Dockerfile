@@ -7,3 +7,5 @@ COPY package*.json ./
 RUN npm install
 
 COPY . . 
+
+ENTRYPOINT ["sh", "ops-tools/docker/docker-entrypoint.sh"]

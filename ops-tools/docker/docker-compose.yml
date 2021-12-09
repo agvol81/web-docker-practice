@@ -6,10 +6,9 @@ services:
       - redis
       - db
     build: 
-      context: ../../
-      dockerfile: ops-tools/docker/images/app/Dockerfile
+       context: ../../
+       dockerfile: ops-tools/docker/images/app/Dockerfile
     image: web-docker-practice-app 
-    command:  sh -c "until nc -z db 5432; do sleep 1; done; npm run migration:run && npm run start:dev"
     restart: unless-stopped
     container_name: web-docker-practice-app 
     environment:
